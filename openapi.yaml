@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: Users Service
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /healthz:
+    get:
+      summary: Liveness probe
+      responses:
+        "200":
+          description: OK
+  /readyz:
+    get:
+      summary: Readiness probe
+      responses:
+        "200":
+          description: READY
+        "500":
+          description: NOT READY
+  /api/users/me:
+    get:
+      summary: Get or create current user's profile
+      responses:
+        "200":
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        "401":
+          description: Unauthorized
+    put:
+      summary: Update current user's profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [display_name]
+              properties:
+                display_name:
+                  type: string
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        "400":
+          description: Validation error
+        "401":
+          description: Unauthorized
+components:
+  schemas:
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        oidc_sub:
+          type: string
+        email:
+          type: string
+          nullable: true
+        display_name:
+          type: string
+          nullable: true
+        role:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
