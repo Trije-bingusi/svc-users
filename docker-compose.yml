@@ -1,0 +1,40 @@
+services:
+  api:
+    build: .
+    container_name: svc-users
+    restart: unless-stopped
+    command: sh -c "npm run prisma:generate && npx prisma migrate deploy && npm start"
+    environment:
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+      OIDC_ISSUER: ${OIDC_ISSUER}
+      OIDC_JWKS_URI: ${OIDC_JWKS_URI}
+      OIDC_AUDIENCE: ${OIDC_AUDIENCE}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3002:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  db:
+    image: postgres:16-alpine
+    container_name: svc-users-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - users_db_data:/var/lib/postgresql/data
+
+volumes:
+  users_db_data:
