@@ -22,8 +22,17 @@ export function requireAuth() {
     try {
       const { payload } = await jwtVerify(token, jwks, {
         issuer: ISSUER,
-        audience: AUDIENCE
       });
+
+      const aud = payload.aud;
+      const okAud =
+        aud === AUDIENCE ||
+        (Array.isArray(aud) && aud.includes(AUDIENCE)) ||
+        payload.azp === AUDIENCE;
+
+      if (!okAud) {
+        return res.status(401).json({ error: "invalid_token" });
+      }
 
       req.user = payload;
       next();
