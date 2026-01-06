@@ -1,0 +1,7 @@
+apiVersion: v2
+name: svc-users
+description: Service for managing users
+
+type: application
+version: 0.1.0
+appVersion: "vX.Y.Z"  # Overriden in CI/CD pipeline
