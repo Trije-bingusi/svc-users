@@ -26,11 +26,11 @@ app.use(pinoHttp());
 
 // ---- OpenAPI + docs ----
 const openapi = YAML.load("./openapi.yaml");
-app.get("/openapi.json", (_req, res) => res.json(openapi));
+app.get("/docs/users/openapi.json", (_req, res) => res.json(openapi));
 app.use(
-  "/docs",
+  "/docs/users",
   apiReference({
-    spec: { url: "/openapi.json" },
+    spec: { url: "/docs/users/openapi.json" },
     theme: "default",
     darkMode: true
   })
