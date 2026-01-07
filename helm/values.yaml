@@ -27,23 +27,23 @@ env:
   - name: DATABASE_URL
     value: $(DATABASE_BASE_URL)/$(DB_NAME)?sslmode=require
 
+oidc:
+  host: "<needs to be set>"  # using --set flags during helm install/upgrade
+  realm: "rso"
+  clientId: "rso-frontend"
+
 # Service configuration for exposing the application
 service:
   type: ClusterIP
   port: 80
 
-# Ingress configuration for external access
+# Service should not be directly exposed through Ingress, but through API Gateway
 ingress:
-  enabled: true
+  enabled: false
   className: nginx
-  hosts:
-    - paths:
-        # API endpoints
-        - path: /api/users/
-          pathType: Prefix
-        # Documentation endpoint
-        - path: /docs/users/
-          pathType: Prefix
+  tls:
+    enabled: false
+    secretName: nip-tls
 
 # Health check probes configuration
 probes:

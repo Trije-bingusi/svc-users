@@ -35,8 +35,14 @@ spec:
         - name: {{ .Chart.Name }}
 
           # Environment variables
-          {{- if .Values.env }}
           env:
+            - name: OIDC_ISSUER
+              value: "https://{{ .Values.oidc.host }}/realms/{{ .Values.oidc.realm }}"
+            - name: OIDC_JWKS_URI
+              value: "https://{{ .Values.oidc.host }}/realms/{{ .Values.oidc.realm }}/protocol/openid-connect/certs"
+            - name: OIDC_AUDIENCE
+              value: "{{ .Values.oidc.clientId }}"
+          {{- if .Values.env }}
             {{-  .Values.env | toYaml | nindent 12 }}
           {{- end }}
 
