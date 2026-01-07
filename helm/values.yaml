@@ -28,7 +28,7 @@ env:
     value: $(DATABASE_BASE_URL)/$(DB_NAME)?sslmode=require
 
 oidc:
-  host: "<needs to be set>"  # using --set flags during helm install/upgrade
+  host: "http://keycloak.keycloak.svc.cluster.local/keycloak"
   realm: "rso"
   clientId: "rso-frontend"
 

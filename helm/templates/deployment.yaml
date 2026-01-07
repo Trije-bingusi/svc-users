@@ -37,9 +37,9 @@ spec:
           # Environment variables
           env:
             - name: OIDC_ISSUER
-              value: "https://{{ .Values.oidc.host }}/realms/{{ .Values.oidc.realm }}"
+              value: "{{ .Values.oidc.host }}/realms/{{ .Values.oidc.realm }}"
             - name: OIDC_JWKS_URI
-              value: "https://{{ .Values.oidc.host }}/realms/{{ .Values.oidc.realm }}/protocol/openid-connect/certs"
+              value: "{{ .Values.oidc.host }}/realms/{{ .Values.oidc.realm }}/protocol/openid-connect/certs"
             - name: OIDC_AUDIENCE
               value: "{{ .Values.oidc.clientId }}"
           {{- if .Values.env }}

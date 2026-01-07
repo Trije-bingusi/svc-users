@@ -22,8 +22,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../utils/config.sh"
 RG_NAME=$(get_secret "rg-name")
 AKS_NAME=$(get_secret "aks-name")
-INGRESS_IP=$(get_secret "ingress-ip")
-HOSTNAME="$INGRESS_IP.nip.io"
 
 # Authenticate to the AKS cluster
 source "$SCRIPT_DIR/../utils/authenticate.sh"
@@ -35,5 +33,4 @@ helm upgrade --install "$RELEASE_NAME" ./helm \
   --values ./helm/values.yaml \
   --values "$VALUES_FILE" \
   --set image="$IMAGE" \
-  --set oidc.host="$HOSTNAME" \
   --wait --timeout 5m

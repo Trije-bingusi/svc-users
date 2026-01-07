@@ -44,7 +44,6 @@ jobs:
         echo "RESOURCE_GROUP_NAME=$(fetch_secret rg-name)" >> $GITHUB_ENV
         echo "AKS_CLUSTER_NAME=$(fetch_secret aks-name)" >> $GITHUB_ENV
         echo "ACR_LOGIN_SERVER=$(fetch_secret acr-login-server)" >> $GITHUB_ENV
-        echo "INGRESS_IP=$(fetch_secret ingress-ip)" >> $GITHUB_ENV
 
     - name: Get Commit SHA and Semantic Version For Tag
       run: |
@@ -101,6 +100,5 @@ jobs:
           --values ./helm/values.yaml \
           --values "$VALUES_FILE" \
           --set appVersion="$SEMVER_TAG" \
-          --set image="${ACR_LOGIN_SERVER}/${IMAGE_NAME}@${DIGEST}" \
-          --set oidc.host="$INGRESS_IP.nip.io"
+          --set image="${ACR_LOGIN_SERVER}/${IMAGE_NAME}@${DIGEST}"
       
